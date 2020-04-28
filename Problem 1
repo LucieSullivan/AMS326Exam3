@@ -1,1 +1,68 @@
+public class Exam3 {
+    //Number of times the disk is dropped
+    static double numDrop = 1000000;
+    //Length of Needle
+    static double L1 = .1;
+    static double L2 = .25;
+    static double L3 = .5;
+    static double L4 = 1;
+
+    //Distance between lines
+    static double width = 1;
+    //number of times disk crosses a line
+    static int cross = 0;
+
+    public static void main(String[] args){
+        run(L1);
+        run(L2);
+        run(L3);
+        run(L4);
+    }
+
+    public static void run(double length){
+        System.out.println("The length of the needle is: " + length);
+        System.out.println("The number of times the needle will be dropped: " + numDrop);
+        buffon(length);
+        System.out.println("The number of times the needle crossed the function: "+ cross);
+        double prob = cross/numDrop;
+        System.out.println("The probability the needle will cross the function " + prob +"\n");
+        cross = 0;
+    }
+//Checks if the needle passes through the lines
+    //This is the method that I couldn't figure out how to work :(
+    public static boolean crossCheck(double L, double R){
+        if (L >= width || R <= 0) return true;
+        return false;
+    }
+
+    public static void buffon(double length){
+        for(int i = 1; i <= numDrop; i++){
+            //get coordinate of center
+            double x = -1 + Math.random()*2;
+            double y = -1 + Math.random()*2;
+            //angle from positive x axis in radians
+            double theta = Math.toRadians(Math.random()*90);
+
+            //find the endpoints of the needle
+            double yTop = y + (.5 *length * Math.sin(theta));
+            double yBottom = y - (.5 *length * Math.sin(theta));
+            double xR = x + (.5 *length * Math.cos(theta));
+            double xL = x - (.5 *length * Math.cos(theta));
+
+            double slope = (yTop-yBottom)/(xR-xL);
+            double yIntercept = y/(slope*x);
+
+            //equation of the needle in polar
+            double r = Math.sqrt(x*x+y*y);
+            double th = Math.atan(y/x);
+
+
+            if (crossCheck(r, th)) cross++;
+        }
+    }
+
+
+
+
+}
 
